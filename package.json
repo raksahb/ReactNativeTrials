@@ -8,7 +8,7 @@
   "dependencies": {
     "react": "15.2.1",
     "react-native": "0.29.2",
-    "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
+    "react-native-camera": "git+https://github.com/raksahb/react-native-camera.git#video-support",
     "react-native-contacts": "^0.3.0",
     "react-native-video": "^0.8.0"
   }

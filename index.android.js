@@ -10,9 +10,14 @@ import {
     Dimensions,
     StyleSheet,
     Text,
-    View
+    View,
+    ScrollView,
+    TouchableOpacity
 } from 'react-native';
 import Camera from 'react-native-camera';
+import Video from 'react-native-video';
+
+//var VideoPlayer = require('./videoplayer.android');
 
 var Contacts = require('react-native-contacts');
 
@@ -51,41 +56,70 @@ class TestApp extends Component {
             }
         });
     }
+    setDuration(data) {
+        this.setState({duration: data.duration});
+    }
+    onProgress(data) {
+        this.setState({currentTime: data.currentTime});
+    }
+    onEnd() {
+        console.log('Video play Done!');
+    }
 
+    videoError() {
+        console.log('Video play Done!');
+    }
     render() {
         var contact = this.state.mycontacts !== null ? JSON.stringify(this.state.mycontacts[0]) : "";
-        return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    Welcome to React Native!
-                </Text>
-                <Text style={styles.instructions}>
-                    To get started, edit index.android.js
-                </Text>
-                <Text style={styles.instructions}>
-                    Shake or press menu button for dev menu
-                </Text>
-                <Text style={styles.instructions}>
-                    Single Contact : {contact}
-                </Text>
+        if (this.state.myvideo) {
+            return (
                 <View style={styles.container}>
+                    <Video source={{uri: this.state.myvideo}} // Can be a URL or a local file.
+                           rate={1.0}                   // 0 is paused, 1 is normal.
+                           volume={1.0}                 // 0 is muted, 1 is normal.
+                           muted={false}                // Mutes the audio entirely.
+                           paused={false}               // Pauses playback entirely.
+                           resizeMode="contain"           // Fill the whole screen at aspect ratio.
+                           repeat={true}                // Repeat forever.
+                           onEnd={this.onEnd}           // Callback when playback finishes
+                           onError={this.videoError}    // Callback when video cannot be loaded
+                           style={styles.fullScreen} />
+                </View>
+            );
+        } else {
+
+            return (
+                <View style={styles.container}>
+                    <ScrollView>
+                    <Text style={styles.instructions}>
+                        Single Contact : {contact}
+                    </Text>
                     <Camera
                         ref={(cam) => {
-            this.camera = cam;
-          }}
+                this.camera = cam;
+              }}
                         style={styles.preview}
-                        aspect={Camera.constants.Aspect.fill}>
+                        captureMode={1}
+                        aspect={Camera.constants.Aspect.fit}>
                         <Text style={styles.capture} onPress={this.takePicture.bind(this)}>[CAPTURE]</Text>
                     </Camera>
+                    </ScrollView>
                 </View>
-            </View>
-        );
+            );
+        }
     }
 
     takePicture() {
         this.camera.capture()
-            .then((data) => console.log(data))
-            .catch(err => console.error(err));
+            .then((data) => {
+                console.log("received data " + data);
+                console.log("takePicture - received data - who called me - " + new Error("who called me").stack);
+                this.setState({myvideo: data});
+            })
+            .catch(err => {
+                console.log("error  " + err);
+                console.log("takePicture - who called me - " + new Error("who called me").stack);
+            });
     }
 }
 
@@ -107,7 +141,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     preview: {
-        flex: 1,
+        flex: 0.5,
         justifyContent: 'flex-end',
         alignItems: 'center',
         height: Dimensions.get('window').height,
@@ -120,6 +154,13 @@ const styles = StyleSheet.create({
         color: '#000',
         padding: 10,
         margin: 40
+    },
+    fullScreen: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
     },
 });
 

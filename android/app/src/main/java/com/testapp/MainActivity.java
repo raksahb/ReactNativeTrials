@@ -1,9 +1,7 @@
 package com.testapp;
 
 import com.facebook.react.ReactActivity;
-import com.brentvatne.RCTVideo.ReactVideoPackage;
 
-import com.lwansbrough.RCTCamera.*;
 
 public class MainActivity extends ReactActivity {
 

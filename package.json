@@ -1,15 +1,24 @@
 {
-  "name": "TestApp",
+  "name": "ReactNativeTrials",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
   "dependencies": {
-    "react": "15.2.1",
-    "react-native": "0.29.2",
-    "react-native-camera": "git+https://github.com/raksahb/react-native-camera.git#video-support",
-    "react-native-contacts": "^0.3.0",
-    "react-native-video": "^0.8.0"
+    "react": "16.8.3",
+    "react-native": "0.59.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.3",
+    "@babel/runtime": "^7.4.3",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
   }
 }
